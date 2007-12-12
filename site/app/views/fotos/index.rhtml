@@ -1,0 +1,20 @@
+<% require 'cgi' %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+		<title>Test</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<script type="text/javascript" src="/javascripts/ufo.js"></script>
+		<script type="text/javascript">
+		var FO = { movie:"/fotomatic.swf", width:"800", height:"600", majorversion:"8", build:"0", xi:"true", allowscriptaccess: "always", flashvars: 'posturl=<%= CGI::escape("http://localhost:3000/fotos/create") %>'};
+		UFO.create(FO, "ufoDemo");
+		</script>
+	</head>
+	<body>
+		<div id="ufoDemo">
+			<p>Replacement content</p>
+			<p><a href="http://www.macromedia.com/go/getflashplayer"><img src="http://www.macromedia.com/images/shared/download_buttons/get_flash_player.gif" alt="Get macromedia Flash Player" style="border: none;" /></a></p>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
+  creationComplete="init()">
+  <mx:Script>
+    <![CDATA[
+	    import com.adobe.images.JPGEncoder;
+
+	    private var camera:Camera;
+
+      private function init():void {
+			  camera = Camera.getCamera();
+			  camera.setMode(640, 480, 8, true);
+			  vid.attachCamera(camera);
+			  vid.width = camera.width;
+			  vid.height = camera.height;
+      }
+
+      private function snap():void {
+        var params:Object = Application.application.parameters;
+  	    var bitmapData:BitmapData;
+
+        bitmapData = new BitmapData(vid.width, vid.height);
+        bitmapData.draw(vid);
+        var byteArray:ByteArray = new JPGEncoder().encode(bitmapData);
+        
+        //assumed variable declarations
+        //var byteArray:ByteArray = jpg byte array created in step 2
+        var fileName:String = "desiredfilename.jpg"
+        var uploadPath:String = params.posturl;
+        var parameters:Object = {}; //optional generic object containing name value pairs to accompany the post
+        function onComplete(eventObj:Event):void {  
+          // handler for succesful loading of request
+        }
+        function onError(eventObj:ErrorEvent):void {  
+          // handler for faulty loading of request
+        }
+
+        var urlRequest:URLRequest = new URLRequest();
+        urlRequest.url = uploadPath;
+        urlRequest.contentType = 'multipart/form-data; boundary=' + UploadPostHelper.getBoundary();
+        urlRequest.method = URLRequestMethod.POST;
+        urlRequest.data = UploadPostHelper.getPostData(fileName, byteArray, parameters);
+        urlRequest.requestHeaders.push(new URLRequestHeader('Cache-Control', 'no-cache'));
+
+        var urlLoader:URLLoader = new URLLoader();
+        urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+        urlLoader.addEventListener(Event.COMPLETE, onComplete);
+        urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onError);
+        urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onError);
+        urlLoader.load(urlRequest);
+      }
+    ]]>
+  </mx:Script>
+  <mx:VideoDisplay id="vid" width="100%" height="100%" />
+  <mx:Button click="snap()" label="snap" />
+</mx:Application>
